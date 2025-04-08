@@ -1,0 +1,39 @@
+﻿### Base URL
+@baseUrl = http://localhost:5280/api/exchangerate
+
+### Get all exchange rates
+GET {{baseUrl}}
+Accept: application/json
+
+###
+
+### Get a single exchange rate by ID
+GET {{baseUrl}}/1
+Accept: application/json
+
+###
+
+### Create a new exchange rate
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "date": "2025-04-08T00:00:00",
+  "baseCurrency": "EUR",
+  "currency": "BRL",
+  "amount": 6.4211
+}
+
+###
+
+### Update amount of an exchange rate
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+0.95
+
+###
+
+### Delete an exchange rate
+DELETE {{baseUrl}}/1
+

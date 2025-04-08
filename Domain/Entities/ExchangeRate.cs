@@ -14,7 +14,7 @@ namespace Domain.Entities
 
         public ExchangeRate(DateTime date, string baseCurrency, string currency, decimal amount)
         {
-            Date = date;
+            Date = date.Date;
             BaseCurrency = baseCurrency;
             Currency = currency;
             Amount = amount;

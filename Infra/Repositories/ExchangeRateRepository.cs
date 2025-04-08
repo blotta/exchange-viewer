@@ -42,5 +42,13 @@ namespace Infra.Repositories
             _context.ExchangeRates.Remove(rate);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<ExchangeRate?> GetByKeysAsync(DateTime date, string baseCurrency, string currency)
+        {
+            return await _context.ExchangeRates.FirstOrDefaultAsync(e =>
+                e.Date == date &&
+                e.BaseCurrency == baseCurrency &&
+                e.Currency == currency);
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace Application.Interfaces
         Task<int> CreateAsync(ExchangeRateDto dto);
         Task UpdateAsync(int id, decimal newAmount);
         Task DeleteAsync(int id);
+        Task UpsertAsync(ExchangeRateDto dto);
     }
 }

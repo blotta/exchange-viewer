@@ -25,7 +25,7 @@ namespace Application.Services
             return rates.Select(r => new ExchangeRateDto
             {
                 Id = r.Id,
-                Date = r.Date,
+                Date = r.Date.Date,
                 BaseCurrency = r.BaseCurrency,
                 Currency = r.Currency,
                 Amount = r.Amount
@@ -40,7 +40,7 @@ namespace Application.Services
             return new ExchangeRateDto
             {
                 Id = rate.Id,
-                Date = rate.Date,
+                Date = rate.Date.Date,
                 BaseCurrency = rate.BaseCurrency,
                 Currency = rate.Currency,
                 Amount = rate.Amount
@@ -49,7 +49,7 @@ namespace Application.Services
 
         public async Task<int> CreateAsync(ExchangeRateDto dto)
         {
-            var entity = new ExchangeRate(dto.Date, dto.BaseCurrency, dto.Currency, dto.Amount);
+            var entity = new ExchangeRate(dto.Date.Date, dto.BaseCurrency, dto.Currency, dto.Amount);
             await _repository.AddAsync(entity);
             return entity.Id;
         }
@@ -67,6 +67,22 @@ namespace Application.Services
             var entity = await _repository.GetByIdAsync(id) 
                          ?? throw new Exception("ExchangeRate not found.");
             await _repository.DeleteAsync(entity);
+        }
+
+        public async Task UpsertAsync(ExchangeRateDto dto)
+        {
+            var existing = await _repository.GetByKeysAsync(dto.Date, dto.BaseCurrency, dto.Currency);
+
+            if (existing is not null)
+            {
+                existing.UpdateRate(dto.Amount);
+                await _repository.UpdateAsync(existing);
+            }
+            else
+            {
+                var newRate = new ExchangeRate(dto.Date, dto.BaseCurrency, dto.Currency, dto.Amount);
+                await _repository.AddAsync(newRate);
+            }
         }
     }
 }

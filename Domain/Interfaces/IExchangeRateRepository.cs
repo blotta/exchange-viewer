@@ -14,5 +14,6 @@ namespace Domain.Interfaces
         public Task AddAsync(ExchangeRate rate);
         public Task UpdateAsync(ExchangeRate rate);
         public Task DeleteAsync(ExchangeRate rate);
+        public Task<ExchangeRate?> GetByKeysAsync(DateTime date, string baseCurrency, string currency);
     }
 }

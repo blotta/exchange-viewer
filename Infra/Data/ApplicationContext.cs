@@ -20,6 +20,11 @@ namespace Infra.Data
                 builder.Property(e => e.BaseCurrency).IsRequired().HasMaxLength(3);
                 builder.Property(e => e.Currency).IsRequired().HasMaxLength(3);
                 builder.Property(e => e.Amount).HasColumnType("decimal(18,4)");
+                builder.Property(e => e.Date)
+                    .HasColumnType("date");
+
+                builder.HasIndex(e => new { e.Date, e.BaseCurrency,  e.Currency })
+                    .IsUnique();
             });
 
             base.OnModelCreating(modelBuilder);

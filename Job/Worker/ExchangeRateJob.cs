@@ -19,7 +19,7 @@ namespace Job.Worker.Worker
         public async Task FetchAndUpsertAsync(string baseCurrency)
         {
             Console.WriteLine($"Fetching {baseCurrency} rates at {DateTime.UtcNow}");
-            await _exchangeRateService.UpsertLatestRatesAsync(baseCurrency);
+            await _exchangeRateService.UpsertRatesAsync(baseCurrency);
             Console.WriteLine($"Exchange rates updated");
         }
     }

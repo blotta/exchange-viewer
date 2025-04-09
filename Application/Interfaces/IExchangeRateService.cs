@@ -15,6 +15,6 @@ namespace Application.Interfaces
         Task UpdateAsync(int id, decimal newAmount);
         Task DeleteAsync(int id);
         Task UpsertAsync(ExchangeRateDto dto);
-        Task UpsertLatestRatesAsync(string baseCurrency);
+        Task UpsertRatesAsync(string baseCurrency, DateTime? date = null);
     }
 }

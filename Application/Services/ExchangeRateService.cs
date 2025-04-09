@@ -88,16 +88,20 @@ namespace Application.Services
             }
         }
 
-        public async Task UpsertLatestRatesAsync(string baseCurrency)
+        public async Task UpsertRatesAsync(string baseCurrency, DateTime? date = null)
         {
-            var date = DateTime.UtcNow.Date;
-            var rates = await _provider.GetRatesAsync(date, baseCurrency);
+            if (date == null)
+                date = DateTime.UtcNow.Date;
+            else
+                date = date.Value.Date;
+
+            var rates = await _provider.GetRatesAsync(date.Value, baseCurrency);
 
             foreach (var rate in rates)
             {
                 await UpsertAsync(new ExchangeRateDto
                 {
-                    Date = date.Date,
+                    Date = date.Value.Date,
                     Amount = rate.Amount,
                     Currency = rate.Currency,
                     BaseCurrency = rate.BaseCurrency,

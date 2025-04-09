@@ -37,3 +37,15 @@ Content-Type: application/json
 ### Delete an exchange rate
 DELETE {{baseUrl}}/1
 
+###
+
+### For testing - fetch and upsert data
+@date = 2025-01-01
+@base = USD
+POST {{baseUrl}}/Fetch/{{date}}/{{base}}
+Content-Type: application/json
+
+{
+}
+
+###

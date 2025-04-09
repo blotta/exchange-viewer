@@ -46,5 +46,13 @@ namespace API.Controllers
             await _service.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpPost]
+        [Route("Fetch/{date:datetime}/{baseCurrency}")]
+        public async Task<IActionResult> FetchExchangeRates([FromRoute] DateTime date, [FromRoute] string baseCurrency)
+        {
+            await _service.UpsertRatesAsync(baseCurrency, date.Date);
+            return NoContent();
+        }
     }
 }

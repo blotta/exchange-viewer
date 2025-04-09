@@ -8,14 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("Connection string not found")));
-
-builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
-builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddControllers();
 

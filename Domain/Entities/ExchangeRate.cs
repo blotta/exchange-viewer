@@ -20,7 +20,7 @@ namespace Domain.Entities
             Amount = amount;
         }
 
-        public void UpdateRate(decimal newAmount)
+        public void UpdateAmount(decimal newAmount)
         {
             Amount = newAmount;
         }

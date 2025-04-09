@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace Application.Services
     public class ExchangeRateService : IExchangeRateService
     {
         private readonly IExchangeRateRepository _repository;
+        private readonly IExchangeRateProvider _provider;
 
-        public ExchangeRateService(IExchangeRateRepository repository)
+        public ExchangeRateService(IExchangeRateRepository repository, IExchangeRateProvider provider)
         {
             _repository = repository;
+            _provider = provider;
         }
 
         public async Task<List<ExchangeRateDto>> GetAllAsync()
@@ -58,7 +61,7 @@ namespace Application.Services
         {
             var entity = await _repository.GetByIdAsync(id) 
                          ?? throw new Exception("ExchangeRate not found.");
-            entity.UpdateRate(newAmount);
+            entity.UpdateAmount(newAmount);
             await _repository.UpdateAsync(entity);
         }
 
@@ -75,7 +78,7 @@ namespace Application.Services
 
             if (existing is not null)
             {
-                existing.UpdateRate(dto.Amount);
+                existing.UpdateAmount(dto.Amount);
                 await _repository.UpdateAsync(existing);
             }
             else
@@ -84,5 +87,23 @@ namespace Application.Services
                 await _repository.AddAsync(newRate);
             }
         }
+
+        public async Task UpsertLatestRatesAsync(string baseCurrency)
+        {
+            var date = DateTime.UtcNow.Date;
+            var rates = await _provider.GetRatesAsync(date, baseCurrency);
+
+            foreach (var rate in rates)
+            {
+                await UpsertAsync(new ExchangeRateDto
+                {
+                    Date = date.Date,
+                    Amount = rate.Amount,
+                    Currency = rate.Currency,
+                    BaseCurrency = rate.BaseCurrency,
+                });
+            }
+        }
+
     }
 }
